@@ -1,8 +1,13 @@
+/* 
+* Reference:
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+*/ 
+
+
 /*
 * Use the Amazon Web Services (AWS) provider to interact with 
 * the many resources supported by AWS. You must configure the 
 * provider with the proper credentials before you can use it.
-* https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 */
 terraform {
     required_providers {
@@ -23,7 +28,7 @@ terraform {
 */
 provider "aws" {
     region = "us-east-1"
-    //shared_config_files      = ["/Users/tf_user/.aws/conf"]
+    //shared_config_files      = ["~/.aws/conf"]
     shared_credentials_files = ["~/.aws/credentials"]
     profile                  = "default"
 }
