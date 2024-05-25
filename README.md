@@ -11,7 +11,13 @@ and an EC2 instance that you can SSH into to have your own redeployable environm
 terraform commands:
     terraform init - initialized terraform
     terraform plan - shows execution plan + see required infrastructure changes
-    terraform apply - creates the vpc (add -auto-approve to avoid confirmation dialogue)
+    terraform apply - creates the vpc 
+        (add -auto-approve to avoid confirmation dialogue)
     terraform show - shows the entire state (state show requires you to input a resource)
-    terraform destroy - destroys all remote objects managed by a particular terraform configuration (deletes everything applied)
-    terraform plan -destroy - shows proposed destroy changes without executing them (add -auto-approve to avoid confirmation dialogue)
+    terraform destroy - destroys all remote objects managed by a particular terraform configuration 
+        (deletes everything applied)
+    terraform plan -destroy - shows proposed destroy changes without executing them 
+        (add -auto-approve to avoid confirmation dialogue)
+    terraform state list - list of resources
+        (vpc id, not a String, but a reference to a resource)
+    terraform state show aws_vpc.my_vpc - shows vpc attributes
