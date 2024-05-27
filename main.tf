@@ -51,3 +51,24 @@ resource "aws_internet_gateway" "my_internet_gateway" {
     Name = "dev-igw"
   }
 }
+
+/*
+* Provides a resource to create a VPC routing table.
+*/
+resource "aws_route_table" "my_public_rt" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  tags = {
+    Name = "dev-public-rt"
+  }
+}
+
+/*
+* Provides a resource to create a routing table entry (a route) in a VPC routing table.
+* Route traffic from subnet to internet gateway
+*/
+resource "aws_route" "default_route" {
+  route_table_id         = aws_route_table.my_public_rt.id // ref route table since I'm doing standalone not inline
+  destination_cidr_block = "0.0.0.0/0"                     // all IP addresses will head for this internet gateway
+  gateway_id             = aws_internet_gateway.my_internet_gateway.id
+}
