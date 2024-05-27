@@ -61,7 +61,7 @@ resource "aws_route_table" "my_public_rt" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "dev-public-rt"
+    Name = "dev_public_rt"
   }
 }
 
@@ -83,4 +83,31 @@ resource "aws_route" "default_route" {
 resource "aws_route_table_association" "my_route_table_assoc" {
   subnet_id      = aws_subnet.my_public_subnet.id
   route_table_id = aws_route_table.my_public_rt.id
+}
+
+/*
+* Provides a security group resource.
+* Controls the traffic that is allowed to reach and leave the resources that it is associated with
+*/
+resource "aws_security_group" "my_sg" {
+  name        = "dev_sg" // no need to tag because sg actually has a name attribute
+  description = "dev security group"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  // inbound traffic
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"] // replace with local computer ip/32 to indicate only this address
+  }
+
+  // outbound traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"] // allow whatever goes into the subnet to access anything (open internet)
+  }
+
 }
