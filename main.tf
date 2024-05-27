@@ -3,6 +3,8 @@
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
 * https://registry.terraform.io/providers/hashicorp/aws/3.24.1/docs/resources/internet_gateway
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table.html
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route
 */
 
 /*
@@ -71,4 +73,14 @@ resource "aws_route" "default_route" {
   route_table_id         = aws_route_table.my_public_rt.id // ref route table since I'm doing standalone not inline
   destination_cidr_block = "0.0.0.0/0"                     // all IP addresses will head for this internet gateway
   gateway_id             = aws_internet_gateway.my_internet_gateway.id
+}
+
+/*
+* Provides a resource to create an association between a route table and a 
+* subnet or a route table and an internet gateway or virtual private gateway.
+* Bridging the gap between route table and subnet
+*/
+resource "aws_route_table_association" "my_route_table_assoc" {
+  subnet_id      = aws_subnet.my_public_subnet.id
+  route_table_id = aws_route_table.my_public_rt.id
 }
