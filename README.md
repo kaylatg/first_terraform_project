@@ -23,3 +23,4 @@ terraform commands:
     terraform state list - list of resources
         (vpc id, not a String, but a reference to a resource)
     terraform state show aws_vpc.my_vpc - shows vpc attributes
+    terraform fmt - corrects formatting

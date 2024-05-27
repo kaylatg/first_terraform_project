@@ -2,39 +2,52 @@
 * References:
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet
+* https://registry.terraform.io/providers/hashicorp/aws/3.24.1/docs/resources/internet_gateway
 */
 
 /*
 * Provides a Virtual Private Cloud (VPC) resource.
+* A logically isolated virtual network that you've defined 
+*
+* classless inter-domain routing block
+* a group of IP addresses that share the same network prefix and number of bits
+* length of the prefix determines the size of the block
+* smaller prefix = larger block/more addresses and vice versa
+*
+* enable_dns_support defaults to true
 */
 resource "aws_vpc" "my_vpc" {
-    // classless inter-domain routing block
-    // a group of IP addresses that share the same network prefix and number of bits
-    // length of the prefix determines the size of the block
-    // smaller prefix = larger block/more addresses and vice versa
-    cidr_block = "10.123.0.0/16" // prefix = 16 (16 fixed bits in the range of addresses)
-    enable_dns_hostnames = true // defaults to false
-    // enable_dns_support defaults to true
-    
-    tags = {
-        Name = "dev" // I know that this is my dev vpc when I go searching
-    }
+  cidr_block           = "10.123.0.0/16" // prefix = 16 (16 fixed bits in the range of addresses)
+  enable_dns_hostnames = true            // defaults to false
+
+  tags = {
+    Name = "dev" // I know that this is my dev vpc when I go searching
+  }
 }
 
 /*
 * Provides a VPC subnet resource.
 * This VPC subnet resource has been specified as public.
+* 
+* Every AZ has at least one data center and is connected to the Internet.
 */
 resource "aws_subnet" "my_public_subnet" {
-    vpc_id = aws_vpc.my_vpc.id
-    cidr_block = "10.123.1.0/24" // one of the subnets within the vpc /16 
-    // Specify true to indicate that instances launched into the subnet should be assigned a public IP address.
-    map_public_ip_on_launch = true 
-    //An Availability Zone (AZ) is a geographic region in which AWS resources are stored. 
-    //Every AZ has at least one data center and is connected to the Internet.
-    availability_zone = "us-east-1a"
+  vpc_id                  = aws_vpc.my_vpc.id
+  cidr_block              = "10.123.1.0/24" // one of the subnets within the vpc /16 
+  map_public_ip_on_launch = true            // instances launched into subnet assigned public IP address
+  availability_zone       = "us-east-1a"    // geographic region where AWS resources are stored
 
-    tags = {
-        Name = "dev-public"
-    }
+  tags = {
+    Name = "dev-public"
+  }
+}
+
+// Provides a resource to create a VPC Internet Gateway.
+// Allows communication between your VPC and the internet
+resource "aws_internet_gateway" "my_internet_gateway" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  tags = {
+    Name = "dev-igw"
+  }
 }

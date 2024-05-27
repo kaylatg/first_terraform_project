@@ -1,7 +1,7 @@
 /* 
 * Reference:
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs
-*/ 
+*/
 
 
 /*
@@ -10,12 +10,12 @@
 * provider with the proper credentials before you can use it.
 */
 terraform {
-    required_providers {
-        aws = {
-            source  = "hashicorp/aws"
-            version = "~> 5.0"
-        }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
     }
+  }
 }
 
 /*
@@ -25,10 +25,11 @@ terraform {
 * AWS_PROFILE, AWS_CONFIG_FILE, and AWS_SHARED_CREDENTIALS_PROFILE.
 * I also could have not named the profile because it would have used
 * the default profile by default.
+* 
+* //shared_config_files      = ["~/.aws/conf"]
 */
 provider "aws" {
-    region = "us-east-1"
-    //shared_config_files      = ["~/.aws/conf"]
-    shared_credentials_files = ["~/.aws/credentials"]
-    profile                  = "default"
+  region                   = "us-east-1"
+  shared_credentials_files = ["~/.aws/credentials"]
+  profile                  = "default"
 }
