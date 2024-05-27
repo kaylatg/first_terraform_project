@@ -12,7 +12,7 @@ resource "aws_vpc" "my_vpc" {
     // a group of IP addresses that share the same network prefix and number of bits
     // length of the prefix determines the size of the block
     // smaller prefix = larger block/more addresses and vice versa
-    cidr_block = "10.123.0.0/16" // prefix = 16 (16 bits used for each network)
+    cidr_block = "10.123.0.0/16" // prefix = 16 (16 fixed bits in the range of addresses)
     enable_dns_hostnames = true // defaults to false
     // enable_dns_support defaults to true
     
@@ -27,7 +27,7 @@ resource "aws_vpc" "my_vpc" {
 */
 resource "aws_subnet" "my_public_subnet" {
     vpc_id = aws_vpc.my_vpc.id
-    cidr_block = "10.123.1.0/16" // one of the subnets within the vpc /16 
+    cidr_block = "10.123.1.0/24" // one of the subnets within the vpc /16 
     // Specify true to indicate that instances launched into the subnet should be assigned a public IP address.
     map_public_ip_on_launch = true 
     //An Availability Zone (AZ) is a geographic region in which AWS resources are stored. 
