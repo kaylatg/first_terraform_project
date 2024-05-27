@@ -96,9 +96,9 @@ resource "aws_security_group" "my_sg" {
 
   // inbound traffic
   ingress {
-    from_port   = 0
+    from_port   = 0 // from and to ports must be 0 if protocol = -1
     to_port     = 0
-    protocol    = "-1"
+    protocol    = "-1" // all kinds of traffic (i.e. TCP, UDP,...)
     cidr_blocks = ["0.0.0.0/0"] // replace with local computer ip/32 to indicate only this address
   }
 
