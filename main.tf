@@ -6,6 +6,9 @@
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table.html
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
+* https://developer.hashicorp.com/terraform/language/functions/file
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 */
 
 /*
@@ -110,4 +113,34 @@ resource "aws_security_group" "my_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"] // allow whatever goes into the subnet to access anything (open internet)
   }
+}
+
+/*
+* Provides an EC2 key pair resource. A key pair is used to control login access to EC2 instances.
+*/
+resource "aws_key_pair" "my_auth" {
+  key_name   = "mykey"
+  public_key = file("~/.ssh/mykey.pub") // reads the contents of the file at path and returns them as string
+}
+
+/*
+* Provides an EC2 instance resource. This allows instances to be created, updated, and deleted.
+*/
+resource "aws_instance" "dev_node" {
+  instance_type          = "t2.micro"
+  ami                    = data.aws_ami.server_ami.id
+  key_name               = aws_key_pair.my_auth.id
+  vpc_security_group_ids = [aws_security_group.my_sg.id]
+  subnet_id              = aws_subnet.my_public_subnet.id
+  user_data              = file("userdata.tpl") // extract data from tpl file and use it to bootstrap instance
+
+  // Configuration block to customize details about the root block device of the instance.
+  root_block_device {
+    volume_size = 10 // default 8
+  }
+
+  tags = {
+    Name = "dev-node"
+  }
+
 }
