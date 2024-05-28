@@ -5,6 +5,7 @@
 * https://registry.terraform.io/providers/hashicorp/aws/3.24.1/docs/resources/internet_gateway
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table.html
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route
+* https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 */
 
 /*
@@ -98,7 +99,7 @@ resource "aws_security_group" "my_sg" {
   ingress {
     from_port   = 0 // from and to ports must be 0 if protocol = -1
     to_port     = 0
-    protocol    = "-1" // all kinds of traffic (i.e. TCP, UDP,...)
+    protocol    = "-1"          // all kinds of traffic (i.e. TCP, UDP,...)
     cidr_blocks = ["0.0.0.0/0"] // replace with local computer ip/32 to indicate only this address
   }
 
@@ -109,5 +110,4 @@ resource "aws_security_group" "my_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"] // allow whatever goes into the subnet to access anything (open internet)
   }
-
 }
