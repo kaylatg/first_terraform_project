@@ -9,6 +9,7 @@
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
 * https://developer.hashicorp.com/terraform/language/functions/file
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+* https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax
 */
 
 /*
@@ -141,6 +142,25 @@ resource "aws_instance" "dev_node" {
 
   tags = {
     Name = "dev-node"
+  }
+
+  /*
+  * Provisioners are a last resort
+  * You can use provisioners to model specific actions on the local machine or on a 
+  * remote machine in order to prepare servers or other infrastructure objects for service.
+  *
+  * This will create our instance and fill config file with the following information and allow us to ssh into the instance
+  * Doesn't count as a change in terraform plan because this doesn't affect the state
+  */
+  provisioner "local-exec" {
+    command = templatefile("mac-ssh-config.tpl", {
+      hostname     = self.public_ip,
+      user         = "ubuntu",
+      identityfile = "~/.ssh/mykey"
+    })
+    // deafults to bash so this isn't really necessary
+    // interpreters tell provisioner what it needs to use to run this script
+    interpreter = ["bash", "-c"]
   }
 
 }

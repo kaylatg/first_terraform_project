@@ -15,6 +15,7 @@ terraform commands:
     terraform plan - shows execution plan + see required infrastructure changes
     terraform apply - creates the vpc 
         (add -auto-approve to avoid confirmation dialogue)
+        (add -apply aws_instance.dev_node to destroy and reapply instance)
     terraform show - shows the entire state (state show requires you to input a resource)
     terraform destroy - destroys all remote objects managed by a particular terraform configuration 
         (deletes everything applied)
