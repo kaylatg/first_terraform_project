@@ -27,3 +27,5 @@ terraform commands:
     terraform fmt - corrects formatting
     ***ssh-keygen -t ed25519 - generating public/private key pair
         ED25519 is a public-key cryptographic algorithm used for digital signature generation and verification.
+
+GitHub actions branch (feat/gha)
